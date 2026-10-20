@@ -119,6 +119,11 @@ main .wrap{padding-block:40px 64px;display:grid;gap:40px}
 .poster .eyebrow{color:var(--banner)}
 .poster h2{font-size:clamp(1.9rem,4vw,2.6rem)}
 .poster .bill{font-size:.95rem;opacity:.9}
+.poster.has-img{padding:0;min-height:0;background:#fbf8ef;display:flex;align-items:center;justify-content:center}
+.poster.has-img img{width:100%;height:auto;display:block}
+.tile .btn{font-size:.95rem;padding:10px 14px}
+.feature-body .strap{color:var(--muted);font-size:1.05rem;margin-top:4px}
+.feature-body .quote{font-family:var(--f-display);font-size:clamp(1.4rem,3vw,1.8rem);line-height:1.25;color:var(--claret)}
 .feature-body{padding:32px;display:grid;gap:18px;align-content:start;min-width:0}
 .facts{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0}
 .facts dt{font-weight:700;color:var(--muted);font-size:.9rem;text-transform:uppercase;letter-spacing:.08em;padding-top:2px}
@@ -131,7 +136,9 @@ main .wrap{padding-block:40px 64px;display:grid;gap:40px}
 
 /* Tiles */
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
-.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:grid;grid-template-rows:auto auto auto 1fr auto;gap:12px;min-width:0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.tile > :last-child{margin-top:auto}
+.tile .thumb{width:100%;max-width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:6px;display:block}
 .tile .month{font-family:var(--f-display);font-size:1.6rem;color:var(--claret);line-height:1}
 .tile .meta{font-size:.95rem;color:var(--muted);display:grid;gap:2px}
 .tile .chips{display:flex;flex-wrap:wrap;gap:6px}
@@ -151,6 +158,7 @@ main .wrap{padding-block:40px 64px;display:grid;gap:40px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
 .card ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.card .addr{color:var(--muted);font-size:.95rem}
 .card .role{color:var(--teal);font-weight:700;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase}
 .big-quote{font-family:var(--f-display);font-size:clamp(1.8rem,4.5vw,2.8rem);line-height:1.15;color:var(--ink);max-width:22ch}
 .big-quote span{color:var(--claret)}
@@ -229,10 +237,10 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
     <div class="page-head">
       <span class="eyebrow">Season 2026–27</span>
       <h1>What's On</h1>
-      <p class="lede">Our current production and what's coming next. Tickets are booked securely online through Stripe.</p>
+      <p class="lede">Our current production and what's coming next. Tickets are booked online through TicketSource.</p>
     </div>
     <div class="tiles" id="tiles"></div>
-    <p class="note">These four listings are examples to show the layout. Replace them with your real productions when they're confirmed.</p>
+    <p class="note">The Séance is confirmed. The three later listings are examples to show the layout. Replace them with your real productions when they're confirmed.</p>
   </div></section>
 
   <!-- PAST -->
@@ -301,7 +309,8 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
       <div class="card">
         <span class="role">Main productions</span>
         <h3>The Parish Rooms, Titchfield</h3>
-        <p>Home to our three or four major productions each year. Seats are booked online in advance.</p>
+        <p>Also known as Titchfield Village Hall. Home to our three or four major productions each year, starting with The Séance in November. Seats are booked online in advance.</p>
+        <p class="addr">Titchfield, Fareham PO14 4AQ</p>
         <div class="actions"><a class="btn" href="#bookings">Book tickets here</a></div>
       </div>
       <div class="card">
@@ -324,13 +333,13 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
     <div class="page-head">
       <span class="eyebrow">Tickets</span>
       <h1>Bookings</h1>
-      <p class="lede">Choose a performance and pay securely through Stripe. You'll get a receipt by email.</p>
+      <p class="lede">Choose a show and book through TicketSource. You'll get your tickets by email.</p>
     </div>
     <div class="book-list" id="book-list"></div>
     <ol class="steps">
-      <li><strong>Pick a show</strong><span>Press "Book tickets" next to the performance you want.</span></li>
-      <li><strong>Pay securely</strong><span>Stripe's checkout page opens. Card details never pass through this website.</span></li>
-      <li><strong>Turn up</strong><span>Give your name at the door. Your email receipt is your ticket.</span></li>
+      <li><strong>Pick a show</strong><span>Press "Book tickets" next to the show you want.</span></li>
+      <li><strong>Choose a performance</strong><span>TicketSource opens in a new tab. Pick your date and time, and pay there.</span></li>
+      <li><strong>Turn up</strong><span>Bring your ticket from the confirmation email, on your phone or printed.</span></li>
     </ol>
     <div class="feature" style="grid-template-columns:1fr">
       <div class="feature-body">
@@ -353,47 +362,54 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
 /* =====================================================
    EDIT YOUR PRODUCTIONS HERE
    - current: true marks the show featured on the Home page
-   - stripe: paste the Stripe Payment Link (https://buy.stripe.com/...)
+   - tickets: paste the booking link (e.g. the TicketSource page)
      Leave it "" and the button reads "Tickets on sale soon".
    - kind: "main" (Parish Rooms production) or "tour" (community visit)
    ===================================================== */
 const PRODUCTIONS = [
-  { month:"November", year:"2026", current:true, kind:"main", example:true,
-    title:"Death by Doily", strap:"A parish whodunnit",
-    dates:"Thu 19 – Sat 21 Nov, 7pm · Sat matinee 2.30pm",
-    venue:"The Parish Rooms, Titchfield", price:"£10 · £8 concessions",
-    blurb:"The church fête is in chaos, the vicar's prize marrow has vanished, and someone has been stabbed with a crochet hook. A comedy mystery with tea and cake at the interval.",
-    stripe:"" },
+  { month:"November", year:"2026", current:true, kind:"main",
+    title:"The Séance", strap:"Murder from Beyond · by Janette Evans",
+    poster:"seance-poster.jpg",
+    quote:"“You killed me and I have the proof.”",
+    dates:"Fri 13 Nov 7pm · Sat 14 Nov 2.30pm & 7pm · Sun 15 Nov 5pm",
+    venue:"The Parish Rooms (Titchfield Village Hall), PO14 4AQ", price:"Prices and booking on TicketSource",
+    blurb:[
+      "A message from ‘the other side’. Betty thinks it's all a bit iffy, but Didi is convinced the dead speak. But who did what, and why?",
+      "AYA present a murder from beyond. Betty and Didi investigate in their own indomitable fashion, with little to go on, including the victim.",
+      "A brand new murder mystery play, with a large helping of humour."
+    ],
+    tickets:"https://www.ticketsource.com/act-your-age-cic/the-seance/e-kkgvgl" },
   { month:"December", year:"2026", kind:"tour", example:true,
     title:"Mince Pies & Monologues", strap:"Festive tour",
     dates:"Thursdays through December",
     venue:"Care homes and day centres", price:"Free to host venues",
     blurb:"Short festive sketches and readings, brought to people who can't easily get out to a show.",
-    stripe:"" },
+    tickets:"" },
   { month:"February", year:"2027", kind:"main", example:true,
     title:"Love Letters from the Front Room", strap:"A comedy of courtship",
     dates:"Thu 25 – Sat 27 Feb, 7pm",
     venue:"The Parish Rooms, Titchfield", price:"£10 · £8 concessions",
     blurb:"Two widowed neighbours, one shared hedge and a postman who reads everything. Romance at any age.",
-    stripe:"" },
+    tickets:"" },
   { month:"April", year:"2027", kind:"main", example:true,
     title:"The Spring Revue", strap:"Songs, sketches and surprises",
     dates:"Thu 22 – Sat 24 Apr, 7pm",
     venue:"The Parish Rooms, Titchfield", price:"£8 · £6 concessions",
     blurb:"Our end-of-season variety night, with every member of the company on stage at least once.",
-    stripe:"" }
+    tickets:"" }
 ];
 
 /* Past productions: add finished shows here, newest first.
    e.g. { title:"Death by Doily", when:"November 2026", venue:"The Parish Rooms", note:"Three sell-out nights." } */
 const PAST = [];
 
+const paras = b => [].concat(b).map(t => `<p>${esc(t)}</p>`).join("");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const kindChip = p => p.kind === "tour" ? '<span class="chip tour">Community tour</span>' : '<span class="chip main">Main production</span>';
 const exChip = p => p.example ? '<span class="chip example">Example</span>' : '';
 function bookBtn(p, label){
-  if (p.kind === "tour" && !p.stripe) return '<a class="btn ghost" href="#bookings">Invite us to visit</a>';
-  if (p.stripe) return '<a class="btn" href="'+esc(p.stripe)+'" target="_blank" rel="noopener">'+(label||"Book tickets")+'</a>';
+  if (p.kind === "tour" && !p.tickets) return '<a class="btn ghost" href="#bookings">Invite us to visit</a>';
+  if (p.tickets) return '<a class="btn" href="'+esc(p.tickets)+'" target="_blank" rel="noopener">'+(label||"Book tickets")+'</a>';
   return '<span class="btn soon" aria-disabled="true">Tickets on sale soon</span>';
 }
 
@@ -401,14 +417,17 @@ function render(){
   const cur = PRODUCTIONS.find(p => p.current) || PRODUCTIONS[0];
   document.getElementById("feature").innerHTML = cur ? `
     <article class="feature">
+      ${cur.poster ? `<div class="poster has-img"><img src="${esc(cur.poster)}" alt="Poster: ${esc(cur.title)}, ${esc(cur.strap)}"></div>` : `
       <div class="poster">
         <span class="eyebrow">Now booking · ${esc(cur.month)} ${esc(cur.year)}</span>
         <h2>${esc(cur.title)}</h2>
         <span class="bill">${esc(cur.strap)}</span>
-      </div>
+      </div>`}
       <div class="feature-body">
-        <div class="tile chips" style="display:flex;gap:6px;padding:0;border:0;background:none">${kindChip(cur)}${exChip(cur)}</div>
-        <p>${esc(cur.blurb)}</p>
+        <span class="eyebrow">Our next show · ${esc(cur.month)} ${esc(cur.year)}</span>
+        <div><h2>${esc(cur.title)}</h2><p class="strap">${esc(cur.strap)}</p></div>
+        ${cur.quote ? `<p class="quote">${esc(cur.quote)}</p>` : ""}
+        ${paras(cur.blurb)}
         <dl class="facts">
           <dt>When</dt><dd>${esc(cur.dates)}</dd>
           <dt>Where</dt><dd>${esc(cur.venue)}</dd>
@@ -420,11 +439,12 @@ function render(){
 
   document.getElementById("tiles").innerHTML = PRODUCTIONS.slice(0,4).map(p => `
     <article class="tile${p.current ? " is-current" : ""}">
+      ${p.poster ? `<img class="thumb" src="${esc(p.poster)}" alt="Poster: ${esc(p.title)}">` : ""}
       <div class="month">${esc(p.month)} <span class="eyebrow">${esc(p.year)}</span></div>
-      <div class="chips">${kindChip(p)}${p.current ? '<span class="chip main">Now booking</span>' : ''}${exChip(p)}</div>
+      <div class="chips">${kindChip(p)}${p.current ? '<span class="chip main">Next show</span>' : ''}${exChip(p)}</div>
       <h3>${esc(p.title)}</h3>
       <div style="display:grid;gap:10px;align-content:start">
-        <p>${esc(p.blurb)}</p>
+        <p>${esc([].concat(p.blurb)[0])}</p>
         <div class="meta"><span>${esc(p.dates)}</span><span>${esc(p.venue)}</span><span>${esc(p.price)}</span></div>
       </div>
       <div>${bookBtn(p)}</div>
@@ -435,7 +455,7 @@ function render(){
     <div class="book-row">
       <div>
         <h3>${esc(p.title)} ${exChip(p)}</h3>
-        <div class="meta">${esc(p.dates)} ${esc(p.year)} · ${esc(p.venue)} · ${esc(p.price)}</div>
+        <div class="meta">${esc(p.dates)} · ${esc(p.venue)} · ${esc(p.price)}</div>
       </div>
       <div>${bookBtn(p)}</div>
     </div>`).join("");
