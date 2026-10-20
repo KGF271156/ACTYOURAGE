@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Act Your Age (AYA) is a community drama group in Titchfield, taking theatre out to people who find it hard to get to one.">
+<title>Act Your Age</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: a claret "stage" band with the animated masks-to-people logo, a sticky playbill nav, then one page shown at a time. Large, high-legibility type for an older audience. */
+:root{
+  --bg:#f4f1f6; --surface:#ffffff; --ink:#22182b; --muted:#635869; --line:#ddd4e2;
+  --claret:#7a1f3d; --gold:#c8962e; --teal:#1f6f6b; --lilac:#8f78a8;
+  --stage:#5c1631; --stage-2:#43101f; --stage-ink:#fbeef2;
+  --banner:#e6b94f; --banner-ink:#2a1420; --brass:#9c6d1c; --skin:#f1c8a3; --hair:#3b2a22; --white-hair:#eeeaf0;
+  --focus:#1f6f6b;
+  --f-display:"Gloock","Georgia","Times New Roman",serif;
+  --f-body:"Atkinson Hyperlegible","Verdana","Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1a1320; --surface:#241b2c; --ink:#f1eaf3; --muted:#b6a9bd; --line:#3a2e43;
+  --claret:#e0708f; --gold:#e3b452; --teal:#62c4ba; --lilac:#b49ccc;
+  --stage:#3a0e20; --stage-2:#2a0916; --stage-ink:#fbeef2; --focus:#62c4ba; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1a1320; --surface:#241b2c; --ink:#f1eaf3; --muted:#b6a9bd; --line:#3a2e43;
+  --claret:#e0708f; --gold:#e3b452; --teal:#62c4ba; --lilac:#b49ccc;
+  --stage:#3a0e20; --stage-2:#2a0916; --stage-ink:#fbeef2; --focus:#62c4ba; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.6}
+*{box-sizing:border-box}
+a{color:var(--claret)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,5vw,3rem)} h2{font-size:clamp(1.6rem,3.6vw,2.2rem)} h3{font-size:1.35rem}
+p{margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+
+/* ---------- Stage / logo ---------- */
+.stage{background:radial-gradient(ellipse at 50% 0%,var(--stage) 0%,var(--stage-2) 75%);color:var(--stage-ink);position:relative;overflow:hidden}
+.stage::before,.stage::after{content:"";position:absolute;top:0;bottom:0;width:7%;background:repeating-linear-gradient(90deg,rgba(0,0,0,.25) 0 10px,rgba(255,255,255,.04) 10px 22px);pointer-events:none}
+.stage::before{left:0} .stage::after{right:0}
+.stage .wrap{padding-block:12px 18px;display:grid;justify-items:center;gap:6px;position:relative;z-index:1}
+#logo{width:100%;max-width:780px;height:auto;display:block}
+.stage-foot{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:center;font-size:.95rem}
+.stage-foot em{font-style:italic;opacity:.9}
+.replay{font:inherit;font-size:.85rem;color:var(--stage-ink);background:transparent;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:4px 14px;cursor:pointer}
+.replay:hover{background:rgba(255,255,255,.1)}
+
+/* SVG paints */
+.f-ink{fill:var(--banner-ink)} .f-skin{fill:var(--skin)} .f-gold{fill:var(--banner)} .f-brass{fill:var(--brass)}
+.f-teal{fill:var(--teal)} .f-lilac{fill:var(--lilac)} .f-hair{fill:var(--hair)} .f-white{fill:var(--white-hair)}
+.f-tragic{fill:#d9d3e3} .f-none{fill:none}
+.s-ink{stroke:var(--banner-ink)} .s-skin{stroke:var(--skin)} .s-brass{stroke:var(--brass)} .s-ink2{stroke:#2a1420}
+.f-banner-text{fill:var(--banner-ink);font-family:var(--f-display);font-size:40px;letter-spacing:4px}
+.f-banner-sub{fill:var(--banner-ink);font-family:var(--f-body);font-size:11px;font-weight:700;letter-spacing:5px}
+.f-spark{fill:var(--banner)}
+
+#logo g{transform-box:fill-box}
+/* Final (rest) state is the base style; animations only run with .play */
+.masks{opacity:0}
+#logo.play .m-in{animation:mIn .8s ease-out both;transform-origin:center}
+#logo.play .m-alive-l{animation:aliveL 1.6s ease-in-out .8s both;transform-origin:50% 80%}
+#logo.play .m-alive-r{animation:aliveR 1.6s ease-in-out .8s both;transform-origin:50% 80%}
+#logo.play .eyes{animation:blink 1.6s .8s both;transform-origin:center}
+#logo.play .masks{animation:show 3.2s linear both}
+#logo.play .m-out-l{animation:outL .8s ease-in 2.4s both;transform-origin:center}
+#logo.play .m-out-r{animation:outR .8s ease-in 2.4s both;transform-origin:center}
+#logo.play .fig{animation:figIn .8s cubic-bezier(.3,1.5,.6,1) 2.75s both;transform-origin:50% 100%}
+#logo.play .spark{animation:spark .9s ease-out 2.6s both;transform-origin:center}
+.spark{opacity:0}
+#logo.play .cloth{animation:unroll 1.5s ease-in-out 3.6s both;transform-origin:center}
+#logo.play .roll-l{animation:rollL 1.5s ease-in-out 3.6s both}
+#logo.play .roll-r{animation:rollR 1.5s ease-in-out 3.6s both}
+#logo.play .arm-l, #logo.play .arm-r{animation:armUp .6s ease-out 3.3s both}
+@keyframes show{0%,99%{opacity:1}100%{opacity:0}}
+@keyframes mIn{from{opacity:0;transform:scale(.3) translateY(40px)}to{opacity:1;transform:none}}
+@keyframes aliveL{0%,100%{transform:none}20%{transform:rotate(-8deg) translateY(-6px)}45%{transform:rotate(6deg)}70%{transform:rotate(-4deg) translateY(-10px)}}
+@keyframes aliveR{0%,100%{transform:none}25%{transform:rotate(8deg) translateY(-4px)}50%{transform:rotate(-6deg)}75%{transform:rotate(5deg) translateY(-8px)}}
+@keyframes blink{0%,30%,36%,72%,78%,100%{transform:none}33%,75%{transform:scaleY(.1)}}
+@keyframes outL{from{transform:none;opacity:1}to{transform:translate(-130px,70px) scale(.4);opacity:0}}
+@keyframes outR{from{transform:none;opacity:1}to{transform:translate(140px,50px) scale(.4);opacity:0}}
+@keyframes figIn{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+@keyframes spark{0%{opacity:0;transform:scale(.2)}40%{opacity:1}100%{opacity:0;transform:scale(1.6) rotate(40deg)}}
+@keyframes unroll{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes rollL{from{transform:translateX(158px)}to{transform:none}}
+@keyframes rollR{from{transform:translateX(-158px)}to{transform:none}}
+@keyframes armUp{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){#logo *{animation:none!important}}
+
+/* ---------- Nav ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav ul{list-style:none;margin:0;padding:0;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.nav a{display:block;padding:14px 14px;text-decoration:none;color:var(--ink);font-weight:700;white-space:nowrap;border-bottom:3px solid transparent;font-size:1rem}
+.nav a:hover{color:var(--claret)}
+.nav a[aria-current="page"]{border-bottom-color:var(--claret);color:var(--claret)}
+
+/* ---------- Pages ---------- */
+main .wrap{padding-block:40px 64px;display:grid;gap:40px}
+.page-head{display:grid;gap:10px;max-width:42rem}
+.lede{font-size:1.15rem;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:700;text-decoration:none;border-radius:8px;padding:12px 20px;border:2px solid var(--claret);background:var(--claret);color:var(--surface);cursor:pointer;min-height:48px}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--claret)}
+.btn.soon{background:transparent;border-style:dashed;border-color:var(--line);color:var(--muted);cursor:default}
+.chip{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.chip.main{border-color:var(--claret);color:var(--claret)}
+.chip.tour{border-color:var(--teal);color:var(--teal)}
+.chip.example{border-style:dashed}
+
+/* Feature (current production) */
+.feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.poster{background:var(--stage);color:var(--stage-ink);padding:32px;display:grid;align-content:end;gap:10px;min-height:280px;position:relative}
+.poster .eyebrow{color:var(--banner)}
+.poster h2{font-size:clamp(1.9rem,4vw,2.6rem)}
+.poster .bill{font-size:.95rem;opacity:.9}
+.feature-body{padding:32px;display:grid;gap:18px;align-content:start;min-width:0}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0}
+.facts dt{font-weight:700;color:var(--muted);font-size:.9rem;text-transform:uppercase;letter-spacing:.08em;padding-top:2px}
+.facts dd{margin:0}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+
+.intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px}
+.intro > div{display:grid;gap:8px;align-content:start}
+.motto{font-family:var(--f-display);font-size:clamp(1.5rem,3vw,2rem);color:var(--claret);line-height:1.25}
+
+/* Tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:grid;grid-template-rows:auto auto auto 1fr auto;gap:12px;min-width:0}
+.tile .month{font-family:var(--f-display);font-size:1.6rem;color:var(--claret);line-height:1}
+.tile .meta{font-size:.95rem;color:var(--muted);display:grid;gap:2px}
+.tile .chips{display:flex;flex-wrap:wrap;gap:6px}
+.tile p{font-size:1rem}
+.tile.is-current{border:2px solid var(--claret)}
+
+.note{border-left:4px solid var(--gold);background:var(--surface);padding:14px 18px;border-radius:0 8px 8px 0;font-size:.95rem;color:var(--muted)}
+
+/* Empty / timeline */
+.empty{background:var(--surface);border:2px dashed var(--line);border-radius:12px;padding:32px;display:grid;gap:10px;text-align:left}
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:2px solid var(--line);margin-left:8px}
+.timeline li{padding:0 0 24px 24px;position:relative;display:grid;gap:4px}
+.timeline li::before{content:"";position:absolute;left:-9px;top:6px;width:16px;height:16px;border-radius:50%;background:var(--gold);border:3px solid var(--bg)}
+.timeline .when{font-weight:700;color:var(--claret)}
+
+/* Cards (involved / venues) */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.card ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.card .role{color:var(--teal);font-weight:700;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase}
+.big-quote{font-family:var(--f-display);font-size:clamp(1.8rem,4.5vw,2.8rem);line-height:1.15;color:var(--ink);max-width:22ch}
+.big-quote span{color:var(--claret)}
+
+/* Booking list */
+.book-list{display:grid;gap:14px}
+.book-row{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 24px;align-items:center}
+.book-row h3{font-size:1.25rem}
+.book-row .meta{color:var(--muted);font-size:.95rem}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;counter-reset:s;list-style:none;margin:0;padding:0}
+.steps li{display:grid;gap:6px;padding-top:12px;border-top:3px solid var(--gold)}
+.steps li strong{font-size:1.05rem}
+
+footer{background:var(--stage-2);color:var(--stage-ink)}
+footer .wrap{padding-block:28px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;font-size:.95rem}
+footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
+
+@media (max-width:760px){
+  .feature{grid-template-columns:1fr}
+  .poster{min-height:200px;padding:24px}
+  .feature-body{padding:24px}
+  .book-row{grid-template-columns:1fr}
+}
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<header class="stage">
+  <div class="wrap">
+    <svg id="logo" class="play" viewBox="0 0 800 340" role="img" aria-labelledby="logo-t">
+      <title id="logo-t">Act Your Age: the comedy and tragedy masks come alive, become a five-year-old and an eighty-year-old, and unroll a banner reading Act Your Age</title>
+
+      <!-- Masks -->
+      <g class="masks">
+        <g transform="translate(330 150) rotate(-10)">
+          <g class="m-out-l"><g class="m-in"><g class="m-alive-l">
+            <path class="f-gold s-ink" stroke-width="3" d="M-58,-72 Q0,-98 58,-72 Q72,6 0,82 Q-72,6 -58,-72Z"/>
+            <path class="f-none s-ink" stroke-width="3" d="M-46,-50 q14,-10 26,0 M20,-50 q14,-10 26,0"/>
+            <g class="eyes">
+              <path class="f-ink" d="M-44,-28 q12,-16 24,0 q-12,-6 -24,0Z M20,-28 q12,-16 24,0 q-12,-6 -24,0Z"/>
+            </g>
+            <path class="f-ink" d="M-34,14 Q0,56 34,14 Q0,30 -34,14Z"/>
+            <circle class="f-brass" cx="-42" cy="4" r="7" opacity=".5"/><circle class="f-brass" cx="42" cy="4" r="7" opacity=".5"/>
+          </g></g></g>
+        </g>
+        <g transform="translate(470 150) rotate(10)">
+          <g class="m-out-r"><g class="m-in"><g class="m-alive-r">
+            <path class="f-tragic s-ink" stroke-width="3" d="M-58,-72 Q0,-98 58,-72 Q72,6 0,82 Q-72,6 -58,-72Z"/>
+            <path class="f-none s-ink" stroke-width="3" d="M-46,-46 q14,-12 26,-4 M20,-50 q14,-8 26,4"/>
+            <g class="eyes">
+              <path class="f-ink" d="M-44,-30 q12,16 24,0 q-12,6 -24,0Z M20,-30 q12,16 24,0 q-12,6 -24,0Z"/>
+            </g>
+            <path class="f-ink" d="M-30,40 Q0,4 30,40 Q0,26 -30,40Z"/>
+            <path class="f-teal" d="M-32,-14 q-4,12 0,18 q4,-6 0,-18Z"/>
+          </g></g></g>
+        </g>
+      </g>
+
+      <!-- Sparkles at the moment of change -->
+      <g class="spark"><path class="f-spark" d="M200,230 l6,-18 l6,18 l18,6 l-18,6 l-6,18 l-6,-18 l-18,-6Z"/></g>
+      <g class="spark"><path class="f-spark" d="M604,210 l6,-18 l6,18 l18,6 l-18,6 l-6,18 l-6,-18 l-18,-6Z"/></g>
+
+      <!-- Banner (rest state = fully unrolled) -->
+      <g class="cloth">
+        <path class="f-gold" d="M242,124 L558,124 L558,186 Q400,198 242,186Z"/>
+        <path class="f-none s-brass" stroke-width="2" d="M250,132 L550,132 M250,180 Q400,190 550,180"/>
+        <text class="f-banner-text" x="400" y="170" text-anchor="middle">ACT YOUR AGE</text>
+      </g>
+      <g class="roll-l"><rect class="f-brass" x="230" y="114" width="16" height="84" rx="8"/><rect class="f-gold" x="234" y="108" width="8" height="8" rx="3"/><rect class="f-gold" x="234" y="196" width="8" height="8" rx="3"/></g>
+      <g class="roll-r"><rect class="f-brass" x="554" y="114" width="16" height="84" rx="8"/><rect class="f-gold" x="558" y="108" width="8" height="8" rx="3"/><rect class="f-gold" x="558" y="196" width="8" height="8" rx="3"/></g>
+
+      <!-- The five-year-old -->
+      <g transform="translate(196 0)"><g class="fig">
+        <rect class="f-ink" x="-11" y="270" width="7" height="44" rx="3"/><rect class="f-ink" x="4" y="270" width="7" height="44" rx="3"/>
+        <ellipse class="f-teal" cx="-10" cy="316" rx="9" ry="5"/><ellipse class="f-teal" cx="11" cy="316" rx="9" ry="5"/>
+        <path class="f-none s-skin" stroke-width="6" stroke-linecap="round" d="M-9,222 L-22,252"/>
+        <path class="f-gold" d="M-24,276 L-9,214 L9,214 L24,276Z"/>
+        <path class="f-brass" d="M-24,276 L24,276 L22,268 L-22,268Z"/>
+        <path class="f-none s-skin arm-l" stroke-width="6" stroke-linecap="round" d="M8,220 L38,190"/>
+        <circle class="f-skin" cx="0" cy="196" r="17"/>
+        <path class="f-hair" d="M-18,198 Q-20,174 0,176 Q20,174 18,198 L14,190 Q0,184 -14,190Z"/>
+        <path class="f-teal" d="M10,178 l10,-8 l2,12Z M10,178 l-2,-12 l12,4Z"/>
+        <circle class="f-ink" cx="-6" cy="196" r="2.2"/><circle class="f-ink" cx="6" cy="196" r="2.2"/>
+        <path class="f-none s-ink2" stroke-width="2" stroke-linecap="round" d="M-6,203 q6,6 12,0"/>
+      </g></g>
+
+      <!-- The eighty-year-old -->
+      <g transform="translate(614 0)"><g class="fig">
+        <rect class="f-ink" x="-12" y="266" width="9" height="48" rx="3"/><rect class="f-ink" x="3" y="266" width="9" height="48" rx="3"/>
+        <ellipse class="f-ink" cx="-10" cy="316" rx="11" ry="5"/><ellipse class="f-ink" cx="12" cy="316" rx="11" ry="5"/>
+        <path class="f-none s-brass" stroke-width="5" stroke-linecap="round" d="M30,236 L36,316 M30,236 q-2,-10 -10,-8"/>
+        <path class="f-none s-skin" stroke-width="7" stroke-linecap="round" d="M14,190 L28,238"/>
+        <rect class="f-lilac" x="-21" y="174" width="42" height="98" rx="14"/>
+        <path class="f-none s-ink2" stroke-width="2" d="M0,180 L0,268" opacity=".4"/>
+        <circle class="f-ink" cx="0" cy="200" r="2"/><circle class="f-ink" cx="0" cy="220" r="2"/><circle class="f-ink" cx="0" cy="240" r="2"/>
+        <path class="f-none s-skin arm-r" stroke-width="7" stroke-linecap="round" d="M-14,186 L-46,160"/>
+        <circle class="f-skin" cx="0" cy="154" r="18"/>
+        <path class="f-white" d="M-19,156 Q-24,138 -10,140 Q-14,148 -14,160Z M19,156 Q24,138 10,140 Q14,148 14,160Z"/>
+        <path class="f-white" d="M-10,138 Q0,132 10,138 Q0,136 -10,140Z"/>
+        <circle class="f-none s-ink2" stroke-width="1.8" cx="-7" cy="153" r="5"/><circle class="f-none s-ink2" stroke-width="1.8" cx="7" cy="153" r="5"/>
+        <path class="f-none s-ink2" stroke-width="1.8" d="M-2,153 L2,153"/>
+        <path class="f-none s-ink2" stroke-width="2" stroke-linecap="round" d="M-6,163 q6,5 12,0"/>
+      </g></g>
+    </svg>
+    <div class="stage-foot">
+      <em>A community drama group in Titchfield</em>
+      <button class="replay" id="replay" type="button">Play the curtain-up again</button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#whats-on">What's On</a></li>
+      <li><a href="#past">Past Productions</a></li>
+      <li><a href="#get-involved">Get Involved</a></li>
+      <li><a href="#venues">Venues</a></li>
+      <li><a href="#bookings">Bookings</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <!-- HOME -->
+  <section id="page-home" data-page="home"><div class="wrap">
+    <div id="feature"></div>
+    <div class="intro">
+      <div>
+        <span class="eyebrow">Who we are</span>
+        <p>Act Your Age is a drama group that takes theatre out into the local community, especially to people who find it hard to get to a theatre. We perform lighter pieces in community venues, and three or four major productions a year in the Parish Rooms in Titchfield.</p>
+      </div>
+      <div>
+        <span class="eyebrow">When we meet</span>
+        <p>Thursday afternoons at the Queen's Head, Titchfield. New faces are always welcome, on stage or behind it.</p>
+        <p><a href="#get-involved">How to join us</a></p>
+      </div>
+      <div>
+        <p class="motto">You don't have to be old. Just available.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- WHAT'S ON -->
+  <section id="page-whats-on" data-page="whats-on" hidden><div class="wrap">
+    <div class="page-head">
+      <span class="eyebrow">Season 2026–27</span>
+      <h1>What's On</h1>
+      <p class="lede">Our current production and what's coming next. Tickets are booked securely online through Stripe.</p>
+    </div>
+    <div class="tiles" id="tiles"></div>
+    <p class="note">These four listings are examples to show the layout. Replace them with your real productions when they're confirmed.</p>
+  </div></section>
+
+  <!-- PAST -->
+  <section id="page-past" data-page="past" hidden><div class="wrap">
+    <div class="page-head">
+      <span class="eyebrow">The archive</span>
+      <h1>Past Productions</h1>
+      <p class="lede">Every show we put on will be remembered here, with photos and a few words from the cast.</p>
+    </div>
+    <div id="past-list"></div>
+    <div>
+      <h2 style="margin-bottom:20px">Our story so far</h2>
+      <ol class="timeline">
+        <li><span class="when">Autumn 2026</span><span>Act Your Age is founded. Thursday afternoon sessions begin at the Queen's Head, Titchfield.</span></li>
+        <li><span class="when">Next</span><span>Our first production in the Parish Rooms, and our first visits out into the community.</span></li>
+      </ol>
+    </div>
+  </div></section>
+
+  <!-- GET INVOLVED -->
+  <section id="page-get-involved" data-page="get-involved" hidden><div class="wrap">
+    <div class="page-head">
+      <span class="eyebrow">Join the company</span>
+      <h1>Get Involved</h1>
+    </div>
+    <p class="big-quote">You don't have to be old. <span>Just available.</span></p>
+    <p class="lede" style="max-width:42rem">Most of us are of an older age range, because Thursday afternoons suit people with a bit of time on their hands. Anyone of any age who can make it is welcome. No experience needed.</p>
+    <div class="cards">
+      <div class="card">
+        <span class="role">On stage</span>
+        <h3>Tread the boards</h3>
+        <p>Acting in our main productions, or in the shorter, lighter pieces we take out to care homes, day centres and community groups.</p>
+      </div>
+      <div class="card">
+        <span class="role">Behind the scenes</span>
+        <h3>Make it happen</h3>
+        <ul><li>Set building and painting</li><li>Costumes and props</li><li>Lighting and sound</li><li>Prompting and stage management</li></ul>
+      </div>
+      <div class="card">
+        <span class="role">Front of house</span>
+        <h3>Welcome the audience</h3>
+        <ul><li>Tickets and programmes</li><li>Refreshments at the interval</li><li>Helping audience members who need a hand</li><li>Lifts to and from venues</li></ul>
+      </div>
+    </div>
+    <div class="feature" style="grid-template-columns:1fr">
+      <div class="feature-body">
+        <h2>Come along on a Thursday</h2>
+        <dl class="facts">
+          <dt>When</dt><dd>Thursday afternoons</dd>
+          <dt>Where</dt><dd>The Queen's Head, Titchfield</dd>
+          <dt>Who</dt><dd>Anyone who's available. Bring a friend.</dd>
+        </dl>
+        <div class="actions"><a class="btn" href="#venues">Find the Queen's Head</a></div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- VENUES -->
+  <section id="page-venues" data-page="venues" hidden><div class="wrap">
+    <div class="page-head">
+      <span class="eyebrow">Where to find us</span>
+      <h1>Venues</h1>
+      <p class="lede">We rehearse in one place, perform our big shows in another, and travel to everywhere else.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <span class="role">Main productions</span>
+        <h3>The Parish Rooms, Titchfield</h3>
+        <p>Home to our three or four major productions each year. Seats are booked online in advance.</p>
+        <div class="actions"><a class="btn" href="#bookings">Book tickets here</a></div>
+      </div>
+      <div class="card">
+        <span class="role">Rehearsals</span>
+        <h3>The Queen's Head, Titchfield</h3>
+        <p>Where we meet every Thursday afternoon to rehearse, read new scripts and plan the next show. Drop in if you'd like to get involved.</p>
+        <div class="actions"><a class="btn ghost" href="#get-involved">Join us on a Thursday</a></div>
+      </div>
+      <div class="card">
+        <span class="role">On tour</span>
+        <h3>Your venue</h3>
+        <p>Care homes, day centres, church halls and community groups. We bring shorter, lighter pieces to audiences who find it hard to get to a theatre.</p>
+        <div class="actions"><a class="btn ghost" href="#bookings">Ask us to visit</a></div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- BOOKINGS -->
+  <section id="page-bookings" data-page="bookings" hidden><div class="wrap">
+    <div class="page-head">
+      <span class="eyebrow">Tickets</span>
+      <h1>Bookings</h1>
+      <p class="lede">Choose a performance and pay securely through Stripe. You'll get a receipt by email.</p>
+    </div>
+    <div class="book-list" id="book-list"></div>
+    <ol class="steps">
+      <li><strong>Pick a show</strong><span>Press "Book tickets" next to the performance you want.</span></li>
+      <li><strong>Pay securely</strong><span>Stripe's checkout page opens. Card details never pass through this website.</span></li>
+      <li><strong>Turn up</strong><span>Give your name at the door. Your email receipt is your ticket.</span></li>
+    </ol>
+    <div class="feature" style="grid-template-columns:1fr">
+      <div class="feature-body">
+        <span class="eyebrow">Community visits</span>
+        <h2>Bring Act Your Age to you</h2>
+        <p>Run a care home, day centre, lunch club or community group? We'd love to perform for your residents or members. Have a word with us at the Queen's Head on a Thursday afternoon to arrange a date.</p>
+      </div>
+    </div>
+  </div></section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Act Your Age</strong><br>AYA · Community drama, Titchfield</div>
+    <div>Meeting Thursday afternoons<br>at the Queen's Head, Titchfield</div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================
+   EDIT YOUR PRODUCTIONS HERE
+   - current: true marks the show featured on the Home page
+   - stripe: paste the Stripe Payment Link (https://buy.stripe.com/...)
+     Leave it "" and the button reads "Tickets on sale soon".
+   - kind: "main" (Parish Rooms production) or "tour" (community visit)
+   ===================================================== */
+const PRODUCTIONS = [
+  { month:"November", year:"2026", current:true, kind:"main", example:true,
+    title:"Death by Doily", strap:"A parish whodunnit",
+    dates:"Thu 19 – Sat 21 Nov, 7pm · Sat matinee 2.30pm",
+    venue:"The Parish Rooms, Titchfield", price:"£10 · £8 concessions",
+    blurb:"The church fête is in chaos, the vicar's prize marrow has vanished, and someone has been stabbed with a crochet hook. A comedy mystery with tea and cake at the interval.",
+    stripe:"" },
+  { month:"December", year:"2026", kind:"tour", example:true,
+    title:"Mince Pies & Monologues", strap:"Festive tour",
+    dates:"Thursdays through December",
+    venue:"Care homes and day centres", price:"Free to host venues",
+    blurb:"Short festive sketches and readings, brought to people who can't easily get out to a show.",
+    stripe:"" },
+  { month:"February", year:"2027", kind:"main", example:true,
+    title:"Love Letters from the Front Room", strap:"A comedy of courtship",
+    dates:"Thu 25 – Sat 27 Feb, 7pm",
+    venue:"The Parish Rooms, Titchfield", price:"£10 · £8 concessions",
+    blurb:"Two widowed neighbours, one shared hedge and a postman who reads everything. Romance at any age.",
+    stripe:"" },
+  { month:"April", year:"2027", kind:"main", example:true,
+    title:"The Spring Revue", strap:"Songs, sketches and surprises",
+    dates:"Thu 22 – Sat 24 Apr, 7pm",
+    venue:"The Parish Rooms, Titchfield", price:"£8 · £6 concessions",
+    blurb:"Our end-of-season variety night, with every member of the company on stage at least once.",
+    stripe:"" }
+];
+
+/* Past productions: add finished shows here, newest first.
+   e.g. { title:"Death by Doily", when:"November 2026", venue:"The Parish Rooms", note:"Three sell-out nights." } */
+const PAST = [];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const kindChip = p => p.kind === "tour" ? '<span class="chip tour">Community tour</span>' : '<span class="chip main">Main production</span>';
+const exChip = p => p.example ? '<span class="chip example">Example</span>' : '';
+function bookBtn(p, label){
+  if (p.kind === "tour" && !p.stripe) return '<a class="btn ghost" href="#bookings">Invite us to visit</a>';
+  if (p.stripe) return '<a class="btn" href="'+esc(p.stripe)+'" target="_blank" rel="noopener">'+(label||"Book tickets")+'</a>';
+  return '<span class="btn soon" aria-disabled="true">Tickets on sale soon</span>';
+}
+
+function render(){
+  const cur = PRODUCTIONS.find(p => p.current) || PRODUCTIONS[0];
+  document.getElementById("feature").innerHTML = cur ? `
+    <article class="feature">
+      <div class="poster">
+        <span class="eyebrow">Now booking · ${esc(cur.month)} ${esc(cur.year)}</span>
+        <h2>${esc(cur.title)}</h2>
+        <span class="bill">${esc(cur.strap)}</span>
+      </div>
+      <div class="feature-body">
+        <div class="tile chips" style="display:flex;gap:6px;padding:0;border:0;background:none">${kindChip(cur)}${exChip(cur)}</div>
+        <p>${esc(cur.blurb)}</p>
+        <dl class="facts">
+          <dt>When</dt><dd>${esc(cur.dates)}</dd>
+          <dt>Where</dt><dd>${esc(cur.venue)}</dd>
+          <dt>Tickets</dt><dd>${esc(cur.price)}</dd>
+        </dl>
+        <div class="actions">${bookBtn(cur)}<a class="btn ghost" href="#whats-on">See the whole season</a></div>
+      </div>
+    </article>` : "";
+
+  document.getElementById("tiles").innerHTML = PRODUCTIONS.slice(0,4).map(p => `
+    <article class="tile${p.current ? " is-current" : ""}">
+      <div class="month">${esc(p.month)} <span class="eyebrow">${esc(p.year)}</span></div>
+      <div class="chips">${kindChip(p)}${p.current ? '<span class="chip main">Now booking</span>' : ''}${exChip(p)}</div>
+      <h3>${esc(p.title)}</h3>
+      <div style="display:grid;gap:10px;align-content:start">
+        <p>${esc(p.blurb)}</p>
+        <div class="meta"><span>${esc(p.dates)}</span><span>${esc(p.venue)}</span><span>${esc(p.price)}</span></div>
+      </div>
+      <div>${bookBtn(p)}</div>
+    </article>`).join("");
+
+  const ticketed = PRODUCTIONS.filter(p => p.kind !== "tour");
+  document.getElementById("book-list").innerHTML = ticketed.map(p => `
+    <div class="book-row">
+      <div>
+        <h3>${esc(p.title)} ${exChip(p)}</h3>
+        <div class="meta">${esc(p.dates)} ${esc(p.year)} · ${esc(p.venue)} · ${esc(p.price)}</div>
+      </div>
+      <div>${bookBtn(p)}</div>
+    </div>`).join("");
+
+  document.getElementById("past-list").innerHTML = PAST.length ? '<div class="tiles">' + PAST.map(p => `
+    <article class="tile"><div class="month">${esc(p.when)}</div><h3>${esc(p.title)}</h3><p>${esc(p.note||"")}</p><div class="meta">${esc(p.venue||"")}</div><div></div></article>`).join("") + '</div>'
+    : `<div class="empty"><h3>The curtain hasn't fallen yet</h3><p>We're a new company, so our first finished show will appear here. Come and see it, and you'll be part of the history.</p><div><a class="btn ghost" href="#whats-on">See what's on</a></div></div>`;
+}
+
+const PAGES = ["home","whats-on","past","get-involved","venues","bookings"];
+function route(){
+  let id = (location.hash || "#home").slice(1);
+  if (!PAGES.includes(id)) id = "home";
+  document.querySelectorAll("[data-page]").forEach(s => s.hidden = s.dataset.page !== id);
+  document.querySelectorAll(".nav a").forEach(a => a.getAttribute("href") === "#"+id ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
+  const active = document.querySelector('.nav a[aria-current="page"]');
+  if (active) active.scrollIntoView({block:"nearest", inline:"nearest"});
+}
+window.addEventListener("hashchange", () => { route(); window.scrollTo(0, 0); });
+
+document.getElementById("replay").addEventListener("click", () => {
+  const svg = document.getElementById("logo");
+  svg.classList.remove("play"); void svg.getBoundingClientRect(); svg.classList.add("play");
+});
+
+render(); route();
+</script>
+</body>
+</html>
