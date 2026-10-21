@@ -138,6 +138,8 @@ main .wrap{padding-block:40px 64px;display:grid;gap:40px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .tile > :last-child{margin-top:auto}
+.tile .by{color:var(--muted);margin-top:-6px}
+#past-list .tile .month{font-size:1.2rem}
 .tile .thumb{width:100%;max-width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:6px;display:block}
 .tile .month{font-family:var(--f-display);font-size:1.6rem;color:var(--claret);line-height:1}
 .tile .meta{font-size:.95rem;color:var(--muted);display:grid;gap:2px}
@@ -174,6 +176,7 @@ main .wrap{padding-block:40px 64px;display:grid;gap:40px}
 
 footer{background:var(--stage-2);color:var(--stage-ink)}
 footer .wrap{padding-block:28px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;font-size:.95rem}
+.email{user-select:all;font-weight:700}
 footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
 
 @media (max-width:760px){
@@ -248,16 +251,9 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
     <div class="page-head">
       <span class="eyebrow">The archive</span>
       <h1>Past Productions</h1>
-      <p class="lede">Every show we put on will be remembered here, with photos and a few words from the cast.</p>
+      <p class="lede">The shows we've put on so far. Thank you to everyone who came along.</p>
     </div>
     <div id="past-list"></div>
-    <div>
-      <h2 style="margin-bottom:20px">Our story so far</h2>
-      <ol class="timeline">
-        <li><span class="when">Autumn 2026</span><span>Act Your Age is founded. Thursday afternoon sessions begin at the Queen's Head, Titchfield.</span></li>
-        <li><span class="when">Next</span><span>Our first production in the Parish Rooms, and our first visits out into the community.</span></li>
-      </ol>
-    </div>
   </div></section>
 
   <!-- GET INVOLVED -->
@@ -292,6 +288,7 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
           <dt>When</dt><dd>Thursday afternoons</dd>
           <dt>Where</dt><dd>The Queen's Head, Titchfield</dd>
           <dt>Who</dt><dd>Anyone who's available. Bring a friend.</dd>
+          <dt>Email</dt><dd><span class="email">Actya77@gmail.com</span></dd>
         </dl>
         <div class="actions"><a class="btn" href="#venues">Find the Queen's Head</a></div>
       </div>
@@ -345,7 +342,7 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
       <div class="feature-body">
         <span class="eyebrow">Community visits</span>
         <h2>Bring Act Your Age to you</h2>
-        <p>Run a care home, day centre, lunch club or community group? We'd love to perform for your residents or members. Have a word with us at the Queen's Head on a Thursday afternoon to arrange a date.</p>
+        <p>Run a care home, day centre, lunch club or community group? We'd love to perform for your residents or members. Email us at <span class="email">Actya77@gmail.com</span>, or have a word with us at the Queen's Head on a Thursday afternoon, to arrange a date.</p>
       </div>
     </div>
   </div></section>
@@ -355,53 +352,15 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
   <div class="wrap">
     <div><strong>Act Your Age</strong><br>AYA · Community drama, Titchfield</div>
     <div>Meeting Thursday afternoons<br>at the Queen's Head, Titchfield</div>
+    <div>Get in touch<br><span class="email">Actya77@gmail.com</span></div>
   </div>
 </footer>
 
 <script>
-/* =====================================================
-   EDIT YOUR PRODUCTIONS HERE
-   - current: true marks the show featured on the Home page
-   - tickets: paste the booking link (e.g. the TicketSource page)
-     Leave it "" and the button reads "Tickets on sale soon".
-   - kind: "main" (Parish Rooms production) or "tour" (community visit)
-   ===================================================== */
-const PRODUCTIONS = [
-  { month:"November", year:"2026", current:true, kind:"main",
-    title:"The Séance", strap:"Murder from Beyond · by Janette Evans",
-    poster:"seance-poster.jpg",
-    quote:"“You killed me and I have the proof.”",
-    dates:"Fri 13 Nov 7pm · Sat 14 Nov 2.30pm & 7pm · Sun 15 Nov 5pm",
-    venue:"The Parish Rooms (Titchfield Village Hall), PO14 4AQ", price:"Prices and booking on TicketSource",
-    blurb:[
-      "A message from ‘the other side’. Betty thinks it's all a bit iffy, but Didi is convinced the dead speak. But who did what, and why?",
-      "AYA present a murder from beyond. Betty and Didi investigate in their own indomitable fashion, with little to go on, including the victim.",
-      "A brand new murder mystery play, with a large helping of humour."
-    ],
-    tickets:"https://www.ticketsource.com/act-your-age-cic/the-seance/e-kkgvgl" },
-  { month:"December", year:"2026", kind:"tour", example:true,
-    title:"Mince Pies & Monologues", strap:"Festive tour",
-    dates:"Thursdays through December",
-    venue:"Care homes and day centres", price:"Free to host venues",
-    blurb:"Short festive sketches and readings, brought to people who can't easily get out to a show.",
-    tickets:"" },
-  { month:"February", year:"2027", kind:"main", example:true,
-    title:"Love Letters from the Front Room", strap:"A comedy of courtship",
-    dates:"Thu 25 – Sat 27 Feb, 7pm",
-    venue:"The Parish Rooms, Titchfield", price:"£10 · £8 concessions",
-    blurb:"Two widowed neighbours, one shared hedge and a postman who reads everything. Romance at any age.",
-    tickets:"" },
-  { month:"April", year:"2027", kind:"main", example:true,
-    title:"The Spring Revue", strap:"Songs, sketches and surprises",
-    dates:"Thu 22 – Sat 24 Apr, 7pm",
-    venue:"The Parish Rooms, Titchfield", price:"£8 · £6 concessions",
-    blurb:"Our end-of-season variety night, with every member of the company on stage at least once.",
-    tickets:"" }
-];
+</script>
+<script src="shows.js"></script>
+<script>
 
-/* Past productions: add finished shows here, newest first.
-   e.g. { title:"Death by Doily", when:"November 2026", venue:"The Parish Rooms", note:"Three sell-out nights." } */
-const PAST = [];
 
 const paras = b => [].concat(b).map(t => `<p>${esc(t)}</p>`).join("");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -461,8 +420,15 @@ function render(){
     </div>`).join("");
 
   document.getElementById("past-list").innerHTML = PAST.length ? '<div class="tiles">' + PAST.map(p => `
-    <article class="tile"><div class="month">${esc(p.when)}</div><h3>${esc(p.title)}</h3><p>${esc(p.note||"")}</p><div class="meta">${esc(p.venue||"")}</div><div></div></article>`).join("") + '</div>'
-    : `<div class="empty"><h3>The curtain hasn't fallen yet</h3><p>We're a new company, so our first finished show will appear here. Come and see it, and you'll be part of the history.</p><div><a class="btn ghost" href="#whats-on">See what's on</a></div></div>`;
+    <article class="tile">
+      ${p.poster ? `<img class="thumb" src="${esc(p.poster)}" alt="Poster: ${esc(p.title)}">` : ""}
+      ${p.when ? `<div class="month">${esc(p.when)}</div>` : ""}
+      <h3>${esc(p.title)}</h3>
+      ${p.by ? `<p class="by">by ${esc(p.by)}</p>` : ""}
+      ${paras(p.blurb || "")}
+      <div class="meta">${esc(p.venue || "")}</div>
+    </article>`).join("") + '</div>'
+    : `<div class="empty"><h3>The curtain hasn't fallen yet</h3><p>Our first finished show will appear here.</p><div><a class="btn ghost" href="#whats-on">See what's on</a></div></div>`;
 }
 
 const PAGES = ["home","whats-on","past","get-involved","venues","bookings"];
