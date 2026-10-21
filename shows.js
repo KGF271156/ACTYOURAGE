@@ -33,11 +33,12 @@ const PRODUCTIONS = [
     venue:"Care homes and day centres", price:"Free to host venues",
     blurb:"Short festive sketches and readings, brought to people who can't easily get out to a show.",
     tickets:"" },
-  { month:"February", year:"2027", kind:"main", example:true,
-    title:"Love Letters from the Front Room", strap:"A comedy of courtship",
-    dates:"Thu 25 – Sat 27 Feb, 7pm",
-    venue:"The Parish Rooms, Titchfield", price:"£10 · £8 concessions",
-    blurb:"Two widowed neighbours, one shared hedge and a postman who reads everything. Romance at any age.",
+  { month:"March", year:"2027", kind:"main",
+    title:"Just Call Me Vic", strap:"A new play by Janette Evans",
+    poster:"vic-poster.jpg",
+    dates:"Thu 4 & Fri 5 March, evenings · Sat 6 March, matinee & evening",
+    venue:"The Parish Rooms (Titchfield Village Hall)", price:"Tickets on sale soon",
+    blurb:"A brand new play by Janette Evans. Full details and tickets coming soon. We're casting now: see Get Involved.",
     tickets:"" },
   { month:"April", year:"2027", kind:"main", example:true,
     title:"The Spring Revue", strap:"Songs, sketches and surprises",
@@ -57,3 +58,40 @@ const PAST = [
     poster:"jack-poster.jpg",
     blurb:"Sarah: wife, mother and daughter. An important job with many deadlines, a son Albert who's twelve, nearly thirteen, and her Dad, Jack, who can't look after himself but isn't easy to look after. And then there's Kali!" }
 ];
+
+/* =====================================================
+   CASTING CALL (shown on the Get Involved page)
+   Set CASTING = null; to hide it when casting has closed.
+   ===================================================== */
+const CASTING = {
+  show:"Just Call Me Vic", by:"Janette Evans",
+  auditions:"Saturday 7 November 2026, 2pm – 5pm",
+  where:"The Queen's Head, Titchfield",
+  email:"janetteevans@hotmail.com",
+  key_dates:[
+    "Performances: Thu 4 and Fri 5 March (evenings), Sat 6 March (matinee and evening)",
+    "Dress rehearsal: Sunday 28 February",
+    "You must be available for all of these dates."
+  ],
+  rehearsals:"A mix of Monday, Tuesday and Friday evenings, plus the Sundays in February.",
+  notes:[
+    "There are no show fees.",
+    "You'll print your own script and help with props and costume.",
+    "The cast helps move the set and set up the hall."
+  ],
+  also:"We're also looking for a stage manager.",
+  roles:[
+    ["Vic","Female","35–60","The Vicar"],
+    ["Janet","Female","40–60","Verger"],
+    ["Chris","Male","40–70","Church warden"],
+    ["David","Male","20–30",""],
+    ["Shania","Female","20–30",""],
+    ["Pat","Female","40–50","Landlady"],
+    ["Gracie","Female","70+",""],
+    ["Gavin","Male","20–35",""],
+    ["Steph","Female","20–35",""],
+    ["Sam","Male or female","20–30",""],
+    ["Jo(e)","Male or female","18–25",""],
+    ["Maureen","Female","40–70",""]
+  ]
+};
