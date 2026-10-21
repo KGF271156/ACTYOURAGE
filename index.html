@@ -177,6 +177,21 @@ main .wrap{padding-block:40px 64px;display:grid;gap:40px}
 footer{background:var(--stage-2);color:var(--stage-ink)}
 footer .wrap{padding-block:28px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;font-size:.95rem}
 .email{user-select:all;font-weight:700}
+.casting{background:var(--surface);border:2px solid var(--claret);border-radius:14px;padding:28px;display:grid;gap:22px}
+.casting-head{display:grid;gap:4px}
+.casting .strap{color:var(--muted)}
+.casting-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px}
+.casting-info{display:grid;gap:18px;align-content:start;min-width:0}
+.casting-info h3,.roles-wrap h3{font-size:1.15rem;margin-bottom:6px}
+.casting-info ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.casting .also{font-weight:700;color:var(--teal)}
+.roles-wrap{min-width:0;overflow-x:auto}
+.roles{width:100%;border-collapse:collapse;font-size:1rem}
+.roles th{text-align:left;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:2px solid var(--line)}
+.roles td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.roles td span{display:block;font-size:.9rem;color:var(--muted)}
+.roles .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:760px){.casting-grid{grid-template-columns:1fr}.casting{padding:20px}}
 footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
 
 @media (max-width:760px){
@@ -243,7 +258,7 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
       <p class="lede">Our current production and what's coming next. Tickets are booked online through TicketSource.</p>
     </div>
     <div class="tiles" id="tiles"></div>
-    <p class="note">The Séance is confirmed. The three later listings are examples to show the layout. Replace them with your real productions when they're confirmed.</p>
+    <p class="note">The Séance and Just Call Me Vic are confirmed. The other listings are examples to show the layout. Replace them with your real productions when they're confirmed.</p>
   </div></section>
 
   <!-- PAST -->
@@ -262,6 +277,7 @@ footer strong{font-family:var(--f-display);font-weight:400;font-size:1.3rem}
       <span class="eyebrow">Join the company</span>
       <h1>Get Involved</h1>
     </div>
+    <div id="casting"></div>
     <p class="big-quote">You don't have to be old. <span>Just available.</span></p>
     <p class="lede" style="max-width:42rem">Most of us are of an older age range, because Thursday afternoons suit people with a bit of time on their hands. Anyone of any age who can make it is welcome. No experience needed.</p>
     <div class="cards">
@@ -431,6 +447,40 @@ function render(){
     : `<div class="empty"><h3>The curtain hasn't fallen yet</h3><p>Our first finished show will appear here.</p><div><a class="btn ghost" href="#whats-on">See what's on</a></div></div>`;
 }
 
+function renderCasting(){
+  const el = document.getElementById("casting");
+  const c = (typeof CASTING !== "undefined") ? CASTING : null;
+  if (!c) { el.hidden = true; return; }
+  el.innerHTML = `
+    <article class="casting">
+      <div class="casting-head">
+        <span class="eyebrow">Casting call · now auditioning</span>
+        <h2>${esc(c.show)}</h2>
+        ${c.by ? `<p class="strap">by ${esc(c.by)}</p>` : ""}
+      </div>
+      <div class="casting-grid">
+        <div class="casting-info">
+          <dl class="facts">
+            <dt>Auditions</dt><dd>${esc(c.auditions)}</dd>
+            <dt>Where</dt><dd>${esc(c.where)}</dd>
+            <dt>Interested?</dt><dd>Email <span class="email">${esc(c.email)}</span></dd>
+          </dl>
+          <div><h3>Dates</h3><ul>${c.key_dates.map(d => `<li>${esc(d)}</li>`).join("")}</ul></div>
+          <div><h3>Rehearsals</h3><p>${esc(c.rehearsals)}</p></div>
+          <div><h3>Good to know</h3><ul>${c.notes.map(d => `<li>${esc(d)}</li>`).join("")}</ul></div>
+          ${c.also ? `<p class="also">${esc(c.also)}</p>` : ""}
+        </div>
+        <div class="roles-wrap">
+          <h3>Characters</h3>
+          <table class="roles">
+            <thead><tr><th scope="col">Part</th><th scope="col">Playing age</th><th scope="col">Gender</th></tr></thead>
+            <tbody>${c.roles.map(r => `<tr><td><strong>${esc(r[0])}</strong>${r[3] ? `<span>${esc(r[3])}</span>` : ""}</td><td class="num">${esc(r[2])}</td><td>${esc(r[1])}</td></tr>`).join("")}</tbody>
+          </table>
+        </div>
+      </div>
+    </article>`;
+}
+
 const PAGES = ["home","whats-on","past","get-involved","venues","bookings"];
 function route(){
   let id = (location.hash || "#home").slice(1);
@@ -451,7 +501,7 @@ document.getElementById("sound").addEventListener("click", () => {
   const p = reel.play(); if (p && p.catch) p.catch(() => {});
 });
 
-render(); route();
+render(); renderCasting(); route();
 </script>
 </body>
 </html>
