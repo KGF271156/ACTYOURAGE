@@ -27,12 +27,6 @@ const PRODUCTIONS = [
       "A brand new murder mystery play, with a large helping of humour."
     ],
     tickets:"https://www.ticketsource.com/act-your-age-cic/the-seance/e-kkgvgl" },
-  { month:"December", year:"2026", kind:"tour", example:true,
-    title:"Mince Pies & Monologues", strap:"Festive tour",
-    dates:"Thursdays through December",
-    venue:"Care homes and day centres", price:"Free to host venues",
-    blurb:"Short festive sketches and readings, brought to people who can't easily get out to a show.",
-    tickets:"" },
   { month:"March", year:"2027", kind:"main",
     title:"Just Call Me Vic", strap:"A new play by Janette Evans",
     poster:"vic-poster.jpg",
